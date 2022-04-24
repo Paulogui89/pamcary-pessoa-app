@@ -1,3 +1,24 @@
+<!-- Menu -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="collapse navbar-collapse" id="navbarColor02">
+        <ul class="navbar-nav mr-auto nav-addpessoas">
+            <li class="nav-item active">
+                <a class="nav-link" (click)="pessoaAPIFindAll()">Home <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+        <ul class="navbar-nav mr-auto nav-addpessoas">
+            <li class="nav-item active">
+                <a class="nav-link" (click)="onOpenModal(null, 'adicionar')">Adicionar Pessoa <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input type="search" #key="ngModel" ngModel name="key" id="searchName" class="form-control mr-sm-2" placeholder="Digite ID ou CPF">
+            <button (click)="findByID(key.value)" data-dismiss="modal" class="btn btn-outline-primary">Achar ID</button>
+            <button (click)="findByCPF(key.value)" data-dismiss="modal" class="btn btn-outline-info">Achar CPF</button>
+        </form>
+    </div>
+</nav>
+
 <!-- Cards -->
 <div class="container" id="main-container">
     <div class="row">
@@ -18,11 +39,134 @@
                 </ul>
                 <div class="card-body">
                     <div class="float-right btn-group btn-group-sm">
-                        <a class="btn btn-outline-primary tooltips" data-placement="top" data-original-title="Edit"><i class="bi bi-wrench"></i> </a>
-                        <a class="btn btn-outline-danger" data-placement="top" data-original-title="Delete"><i class="bi bi-trash3-fill"></i></a>
+                        <a (click)="onOpenModal(cardPessoa, 'editar')" class="btn btn-outline-primary tooltips" data-placement="top" data-original-title="Edit"><i class="bi bi-wrench"></i> </a>
+                        <a (click)="onOpenModal(cardPessoa, 'deletar')" class="btn btn-outline-danger" data-placement="top" data-original-title="Delete"><i class="bi bi-trash3-fill"></i></a>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Modais -->
+    <!-- Adicionar Pessoa Modal -->
+    <div class="modal fade" id="adicionarPessoaModal" tabindex="-1" role="dialog" aria-labelledby="adicionarPessoaModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="adicionarPessoaModalLabel">Adicionar Pessoa</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+                </div>
+                <div class="modal-body">
+                    <form #addForm="ngForm" (ngSubmit)="clickModalAdicionarPessoa(addForm)">
+                        <div class="form-group">
+                            <label for="nomeCompleto">Nome Completo</label>
+                            <input type="text" ngModel name="gpspamcaryPessoa001NomeCompleto" class="form-control" id="gpspamcaryPessoa001NomeCompleto" placeholder="Nome Completo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="rg">RG</label>
+                            <input type="email" ngModel name="gpspamcaryPessoa001RG" class="form-control" id="gpspamcaryPessoa001RG" placeholder="RG" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cpf">CPF</label>
+                            <input type="text" ngModel name="gpspamcaryPessoa001CPF" class="form-control" id="gpspamcaryPessoa001CPF" placeholder="CPF" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Estado">Estado</label>
+                            <input type="text" ngModel name="gpspamcaryPessoa001Estado" class="form-control" id="gpspamcaryPessoa001Estado" placeholder="Estado" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cidade">Cidade</label>
+                            <input type="text" ngModel name="gpspamcaryPessoa001Cidade" class="form-control" id="gpspamcaryPessoa001Cidade" placeholder="Cidade" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="endereco">Endereço</label>
+                            <input type="text" ngModel name="gpspamcaryPessoa001Endereco" class="form-control" id="gpspamcaryPessoa001Endereco" placeholder="Endereço" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="adicionar-pessoa-form" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                            <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Salvar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Editar Pessoa Modal -->
+    <div class="modal fade" id="editarPessoaModal" tabindex="-1" role="dialog" aria-labelledby="pessoaEditarModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarPessoaModalLabel">Editar Pessoa {{pessoaEditada?.gpspamcaryPessoa001NomeCompleto}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+         <span aria-hidden="true">&times;</span>
+         </button>
+                </div>
+                <div class="modal-body">
+                    <form #editForm="ngForm">
+                        <div class="form-group">
+                            <label for="name">Nome Completo</label>
+                            <input type="text" ngModel="{{pessoaEditada?.gpspamcaryPessoa001NomeCompleto}}" name="gpspamcaryPessoa001NomeCompleto" class="form-control" id="gpspamcaryPessoa001NomeCompleto" placeholder="Nome Completo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">RG</label>
+                            <input type="email" ngModel="{{pessoaEditada?.gpspamcaryPessoa001RG}}" name="gpspamcaryPessoa001RG" class="form-control" id="gpspamcaryPessoa001RG" placeholder="RG" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">CPF</label>
+                            <input type="text" ngModel="{{pessoaEditada?.gpspamcaryPessoa001CPF}}" name="gpspamcaryPessoa001CPF" class="form-control" id="gpspamcaryPessoa001CPF" placeholder="CPF" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Estado</label>
+                            <input type="text" ngModel="{{pessoaEditada?.gpspamcaryPessoa001Estado}}" name="gpspamcaryPessoa001Estado" class="form-control" id="gpspamcaryPessoa001Estado" placeholder="Estado" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Cidade</label>
+                            <input type="text" ngModel="{{pessoaEditada?.gpspamcaryPessoa001Cidade}}" name="gpspamcaryPessoa001Cidade" class="form-control" id="gpspamcaryPessoa001Cidade" placeholder="Cidade" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Endereço</label>
+                            <input type="text" ngModel="{{pessoaEditada?.gpspamcaryPessoa001Endereco}}" name="gpspamcaryPessoa001Endereco" class="form-control" id="gpspamcaryPessoa001Endereco" placeholder="Endereço" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Fechar</button>
+                            <button (click)="clickModalEditarPessoa(editForm.value)" data-dismiss="modal" class="btn btn-primary">Salvar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deletarPessoaModal" tabindex="-1" role="dialog" aria-labelledby="deletarModelLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModelLabel">Deletar Pessoa</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+         <span aria-hidden="true">&times;</span>
+         </button>
+                </div>
+                <div class="modal-body">
+                    <p>Você tem certeza que deseja deletar os dados do {{pessoaDeletada?.gpspamcaryPessoa001NomeCompleto}}?</p>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+                        <button (click)="clickModalDeletarPessoa(pessoaDeletada.gpspamcaryPessoa001ID)" class="btn btn-danger" data-dismiss="modal">Sim</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- alerta para quando não existir pessoas no banco de dados -->
+<div *ngIf="pessoas?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+    <div class="alert alert-warning" role="alert">
+        <h4 class="alert-heading">Não Há pessoas!</h4>
+        <p>Adicione Pessoas no banco de dados.</p>
     </div>
 </div>

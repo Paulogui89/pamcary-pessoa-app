@@ -33,5 +33,9 @@ export class PessoaService {
     return this.http.delete<void>(`${this.pessoaApiServerURL}/${pessoaID}`);
   }
 
+  public PessoaAPIFindByCPF(pessoaCPF: string): Observable<Pessoa> {
+    return this.http.get<Pessoa>(`${this.pessoaApiServerURL}/cpf/${pessoaCPF}`);
+  }
+
 }
 
