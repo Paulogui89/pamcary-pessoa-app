@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
       },
       (error: HttpErrorResponse) => {
         this.pessoas = [];
-        alert(error.message);
+        alert("status: " + error.status + " - " + error.error.message);
       }
     );
   }
@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
         addForm.reset();
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        alert("status: " + error.status + " - " + error.error.message);
         addForm.reset();
       }
     );
@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
         this.pessoaAPIFindAll();
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        alert("status: " + error.status + " - " + error.error.message);
       }
     );
   }
@@ -69,7 +69,7 @@ export class AppComponent implements OnInit {
         this.pessoaAPIFindAll();
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        alert("status: " + error.status + " - " + error.error.message);
       }
     );
   }
@@ -105,7 +105,7 @@ export class AppComponent implements OnInit {
         this.pessoas.push(response);
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        alert("status: " + error.status + " - " + error.error.message);
       }
     )
   }
@@ -119,7 +119,7 @@ export class AppComponent implements OnInit {
         this.pessoas.push(response);
       },
       (error: HttpErrorResponse) => {
-        alert(error.message);
+        alert("status: " + error.status + " - " + error.error.message);
       }
     )
   }
