@@ -1,5 +1,9 @@
 # PamcaryPessoaApp
 
+Esse app conversa com a API java/spring que está no repositório: https://github.com/Paulogui89/pessoapamcary
+Necessário poder rodar projetos em angular para roda-la e ter a API java/spring rodando na porta 8080 para melhor aproveito.
+
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.3.
 
 ## Development server
